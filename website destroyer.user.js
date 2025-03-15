@@ -6,7 +6,7 @@
 // @version     1.2
 // @author      -
 // @require     https://cdn.jsdelivr.net/npm/@violentmonkey/dom@2
-// @description Chaotic text effect with immediate initial execution
+// @description Destroy any website!
 // ==/UserScript==
 
 console.log("[Scrappifier]: Loaded");
