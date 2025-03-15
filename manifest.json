@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Scrappifier",
+  "version": "0.1",
+  "description": "Destroy any website!",
+  "content_scripts": [
+    {
+      "matches": ["*://*/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["assets/*"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
