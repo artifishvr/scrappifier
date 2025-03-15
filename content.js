@@ -10,24 +10,22 @@ styleElement.textContent = `
 `;
 document.head.appendChild(styleElement);
 
-// Use local audio file from extension
 const audioElement = document.createElement("audio");
 audioElement.src = chrome.runtime.getURL("assets/My Song 16.m4a");
 audioElement.loop = true;
 audioElement.autoplay = true;
 document.body.appendChild(audioElement);
 
-// Define the mutation handler as a named function
 function handleMutations() {
-  // document.querySelectorAll("img").forEach((img) => {
-  //   if (img.classList.contains("processed-by-destroyer")) return;
+  document.querySelectorAll("img").forEach((img) => {
+    if (img.classList.contains("processed-by-destroyer")) return;
 
-  //   img.src = `https://wsrv.nl/?url=${encodeURIComponent(
-  //     img.src
-  //   )}&w=300&q=1&output=jpg`;
+    img.src = `https://wsrv.nl/?url=${encodeURIComponent(
+      img.src
+    )}&w=300&q=1&output=jpg`;
 
-  //   img.classList.add("processed-by-destroyer");
-  // });
+    img.classList.add("processed-by-destroyer");
+  });
 
   document
     .querySelectorAll("h1, h2, h3, h4, p, a, ul, li, code")
@@ -84,7 +82,6 @@ function handleMutations() {
 // Initial page load
 handleMutations();
 
-// Replace VM.observe with MutationObserver for extensions
 const observer = new MutationObserver(() => {
   handleMutations();
 });

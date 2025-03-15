@@ -1,3 +1,5 @@
+// ! Out of date! TODO when finished the main one
+
 // ==UserScript==
 // @name        Scrappifier
 // @namespace   Violentmonkey Scripts
