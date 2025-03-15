@@ -1,5 +1,7 @@
 # Scrappifier
 
+Built at [Scrapyard Vancouver](https://scrapyard.hackclub.com/vancouver)
+
 Scrappifier is an Extension/Userscript that ruins all websites. It features a **fully original** soundtrack, and will make you want to throw your computer out the window.
 
 ## Installation

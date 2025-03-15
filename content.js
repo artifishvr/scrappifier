@@ -7,6 +7,21 @@ styleElement.textContent = `
     display: inline-block;
     transition: transform 0.2s ease;
   }
+  .popup {
+    display: block;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    max-width: 80%;
+    max-height: 80%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    border: 3px solid #5bff2f;
+    background-color: #ff13f0;
+    padding: 20px;
+    border-radius: 10px;
+  }
 `;
 document.head.appendChild(styleElement);
 
@@ -15,6 +30,15 @@ audioElement.src = chrome.runtime.getURL("assets/My Song 16.m4a");
 audioElement.loop = true;
 audioElement.autoplay = true;
 document.body.appendChild(audioElement);
+
+const popups = Array.from({ length: 3 }, (_, i) => {
+  const popup = document.createElement("img");
+  popup.src = chrome.runtime.getURL(`assets/popup${i + 1}.PNG`);
+  popup.style.display = "none";
+  popup.classList.add("popup", "processed-by-destroyer");
+  document.body.appendChild(popup);
+  return popup;
+});
 
 function handleMutations() {
   document.querySelectorAll("img").forEach((img) => {
@@ -91,11 +115,24 @@ observer.observe(document.body, {
   subtree: true,
 });
 
+setInterval(() => {
+  const randomPopup = popups[Math.floor(Math.random() * popups.length)];
+  randomPopup.style.display = "block";
+}, 5000);
+
 if (!window.destroyerEventsAttached) {
-  document.addEventListener("click", () => {
+  document.addEventListener("click", (e) => {
     if (audioElement.paused) {
       audioElement.play();
     }
+
+    // Check if any popups are currently visible and hide them
+    popups.forEach((popup) => {
+      if (popup.style.display === "block") {
+        popup.style.display = "none";
+        e.preventDefault();
+      }
+    });
   });
 
   let lastUpdate = 0;
