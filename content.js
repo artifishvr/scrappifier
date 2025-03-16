@@ -3,25 +3,33 @@ console.log("[Scrappifier]: Loaded");
 // Add base styles
 const styleElement = document.createElement("style");
 styleElement.textContent = `
-  .letter {
-    display: inline-block;
-    transition: transform 0.2s ease;
-  }
-  .popup {
-    display: block;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 9999;
-    max-width: 80%;
-    max-height: 80%;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    border: 3px solid #5bff2f;
-    background-color: #ff13f0;
-    padding: 20px;
-    border-radius: 10px;
-  }
+@font-face {
+    font-family: 'Viner ITC';
+    src: url('${chrome.runtime.getURL(
+      "assets/VINERITC.ttf"
+    )}') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    background-color: #ff13f0 !important;
+    color: #5bff2f !important;
+    font-family: 'Viner ITC', 'Comic Sans MS', cursive !important;
+    }
+
+    .letter {
+        display: inline-block;
+        transition: transform 0.2s ease;
+    }
+    .popup {
+        display: block;
+        position: fixed;
+        transform: translate(-50%, -50%);
+        z-index: 9999;
+        max-width: 40%;
+        max-height: 40%;
+    }
 `;
 document.head.appendChild(styleElement);
 
@@ -30,15 +38,6 @@ audioElement.src = chrome.runtime.getURL("assets/My Song 16.m4a");
 audioElement.loop = true;
 audioElement.autoplay = true;
 document.body.appendChild(audioElement);
-
-const popups = Array.from({ length: 3 }, (_, i) => {
-  const popup = document.createElement("img");
-  popup.src = chrome.runtime.getURL(`assets/popup${i + 1}.PNG`);
-  popup.style.display = "none";
-  popup.classList.add("popup", "processed-by-destroyer");
-  document.body.appendChild(popup);
-  return popup;
-});
 
 function handleMutations() {
   document.querySelectorAll("img").forEach((img) => {
@@ -89,17 +88,6 @@ function handleMutations() {
       element.classList.add("processed-by-destroyer");
     });
 
-  if (!document.body.classList.contains("destroyer-styled")) {
-    document.body.style.cssText = `
-      background-color: #ff13f0 !important;
-      color: #5bff2f !important;
-    `;
-    document.querySelectorAll("a").forEach((a) => {
-      a.style.fontSize = "20px";
-    });
-    document.body.classList.add("destroyer-styled");
-  }
-
   return false;
 }
 
@@ -115,9 +103,19 @@ observer.observe(document.body, {
   subtree: true,
 });
 
+let popups = [];
+
 setInterval(() => {
-  const randomPopup = popups[Math.floor(Math.random() * popups.length)];
-  randomPopup.style.display = "block";
+  const popup = document.createElement("img");
+  popup.src = chrome.runtime.getURL(
+    `assets/popup${Math.floor(Math.random() * 3) + 1}.PNG`
+  );
+  popup.classList.add("popup", "processed-by-destroyer");
+  popup.style.top = `${Math.random() * 100}vh`;
+  popup.style.left = `${Math.random() * 100}vw`;
+  document.body.appendChild(popup);
+  popups.push(popup);
+  return popup;
 }, 5000);
 
 if (!window.destroyerEventsAttached) {
@@ -126,13 +124,10 @@ if (!window.destroyerEventsAttached) {
       audioElement.play();
     }
 
-    // Check if any popups are currently visible and hide them
-    popups.forEach((popup) => {
-      if (popup.style.display === "block") {
-        popup.style.display = "none";
-        e.preventDefault();
-      }
-    });
+    if (popups.length === 0) return;
+    e.preventDefault();
+    const popup = popups.pop();
+    popup.remove();
   });
 
   let lastUpdate = 0;
